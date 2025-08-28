@@ -19,6 +19,8 @@ license=('BSD-2-Clause'
     'MIT')
 
 depends=(
+    'boost-libs'
+    'ckbcomp'
     'efibootmgr'
     'gtk-update-icon-cache'
     'hwinfo'
@@ -30,14 +32,14 @@ depends=(
     'kio>=5.246'
     'kpmcore>=24.01.75'
     'libpwquality'
-    'mkinitcpio-openswap'
+#    'mkinitcpio-openswap'
     'polkit-qt6>=0.175.0'
+    'python'
     'qt6-base>=6.6.0'
     'qt6-svg>=6.6.0'
     'solid>=5.246'
     'squashfs-tools'
     'yaml-cpp'
-    'ckbcomp'
 )
 
 makedepends=('extra-cmake-modules' 'qt6-tools' 'git')
@@ -61,24 +63,19 @@ build() {
         -DCMAKE_INSTALL_PREFIX=/usr \
         -DCMAKE_INSTALL_LIBDIR=lib \
         -DWITH_QT6=ON \
-        -DWITH_PYTHONQT=OFF \
-        -DWITH_KF5DBus=OFF \
-        -DBoost_NO_BOOST_CMAKE=ON \
-        -DWEBVIEW_FORCE_WEBKIT=OFF \
-        -DSKIP_MODULES="webview \
-                        tracking \
-                        interactiveterminal \
-                        initramfs \
-                        initramfscfg \
-                        dracut \
+        -DSKIP_MODULES="dracut \
                         dracutlukscfg \
+                        dummycpp \
                         dummyprocess \
                         dummypython \
-                        dummycpp \
                         dummypythonqt \
-                        services-openrc \
+                        initramfs \
+                        initramfscfg \
+                        interactiveterminal \
                         keyboardq \
                         localeq \
+                        services-openrc \
+                        tracking \
                         welcomeq"
     make
 }
@@ -86,5 +83,8 @@ build() {
 package_calamares() {
     cd "${srcdir}/${pkgname}/build" || return
     make DESTDIR="$pkgdir" install
-    install -Dm644 "${srcdir}/${pkgname}/calamares.desktop" "$pkgdir/etc/xdg/autostart/calamares.desktop"
+    install -Dm644 "../../../data/calamares.desktop" "$pkgdir/etc/xdg/autostart/calamares.desktop"
+    install -Dm755 "../../../data/calamares_polkit" "$pkgdir/usr/bin/calamares_polkit"
+    install -Dm644 "../../../data/49-nopasswd-calamares.rules" "$pkgdir/etc/polkit-1/rules.d/49-nopasswd-calamares.rules"
+    chmod 750      "$pkgdir"/etc/polkit-1/rules.d
 }
