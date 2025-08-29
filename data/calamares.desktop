@@ -2,8 +2,14 @@
 Type=Application
 Version=1.0
 Name=Install Miladi Linux
+Name[es]=Instalador Miladi
+Name[eu]=Miladi instalatu
 GenericName=Live Installer
+GenericName[es]=Instalador en Vivo
+GenericName[eu]=Miladi instalatu
 Comment=Install the operating system to disk
+Comment[es]=Instalar el sistema operativo en disco
+Comment[eu]=Diskoan instalatu sistema eragilea
 Exec=/usr/bin/calamares_polkit %f
 Icon=calamares
 Terminal=false

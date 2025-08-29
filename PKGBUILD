@@ -2,7 +2,7 @@
 # by Maintainer: Rustmilian Rustmilian@proton.me
 # Modifications by: Rubén Gómez rugoli@gmail.com
 
-pkgname=('calamares')
+pkgname=('miladi-calamares')
 
 pkgver=3.4.0
 pkgrel=1
@@ -21,23 +21,27 @@ license=('BSD-2-Clause'
 depends=(
     'boost-libs'
     'ckbcomp'
+    'cryptsetup'
+    'doxygen'
     'efibootmgr'
+    'gptfdisk'
     'gtk-update-icon-cache'
     'hwinfo'
     'icu'
-    'kconfig>=5.246'
-    'kcoreaddons>=5.246'
-    'ki18n>=5.246'
-    'kiconthemes>=5.246'
-    'kio>=5.246'
-    'kpmcore>=24.01.75'
+    'kconfig'
+    'kcoreaddons'
+    'ki18n'
+    'kiconthemes'
+    'kio'
+    'kparts'
+    'kpmcore'
     'libpwquality'
 #    'mkinitcpio-openswap'
-    'polkit-qt6>=0.175.0'
+    'polkit-qt6'
     'python'
-    'qt6-base>=6.6.0'
-    'qt6-svg>=6.6.0'
-    'solid>=5.246'
+    'qt6-base'
+    'qt6-svg'
+    'solid'
     'squashfs-tools'
     'yaml-cpp'
 )
@@ -55,7 +59,7 @@ sha256sums=('45de0214f4a16095374e2ed3982032c34f0f2c2104987089152e4b928dd0548f')
 
 
 build() {
-    cd "${srcdir}/${pkgname}" || return
+    cd "${srcdir}/calamares" || return
     mkdir -p build
     cd build || return
     cmake .. \
@@ -77,11 +81,11 @@ build() {
                         services-openrc \
                         tracking \
                         welcomeq"
-    make
+    cmake
 }
 
-package_calamares() {
-    cd "${srcdir}/${pkgname}/build" || return
+package() {
+    cd "${srcdir}/calamares/build" || return
     make DESTDIR="$pkgdir" install
     install -Dm644 "../../../data/calamares.desktop" "$pkgdir/etc/xdg/autostart/calamares.desktop"
     install -Dm755 "../../../data/calamares_polkit" "$pkgdir/usr/bin/calamares_polkit"
